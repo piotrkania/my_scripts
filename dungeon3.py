@@ -164,6 +164,10 @@ def profession():
         else:
             print("You must choose a valid class...")
             continue
+            
+var_prof=profession()
+if var_prof==Fighter:
+    print("You are fighter")
 #Greetings
 char_name()
 
