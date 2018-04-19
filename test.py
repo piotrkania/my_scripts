@@ -184,3 +184,8 @@ print("You are fighting " + mob.name)
 if command:
     hero.COMMANDS[command][1]()
     PlayerAttack()
+
+    
+    
+#   Dla kazdego spella utworzyc klase, wpisac tam atrybuty, w pozniejszej faze stworzy klasy dla kazdej
+#   z ras + atrybuty, przy wyborze profesji suma stat rasa+profesja, utworzyc ekwipunek, dodac potiony itd itp 
