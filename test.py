@@ -1,136 +1,54 @@
 #!/usr/bin/python3
 
-from random import randint
+import welcome
+from actions import PlayerAttack
+from dice import Die
+from professions import Fighter
+from professions import Rogue
+from professions import Mage
+from monsters import Zombie
+from monsters import Ghul
+from monsters import Ghost
+from monsters import Skeleton
+import races
+import spells
 
-
-
-# Class to define die roll
-class Die:
-    def __init__(self, sides=6):
-        self.sides = sides
-
-    def roll(self):
-        return randint(1, self.sides)
-
+# defines types of dice
 four_sided_die=Die(4)
 six_sided_die=Die(6)
 ten_sided_die=Die(10)
 twenty_sided_die=Die(20)
 
 
-class Player:
-    def __init__(self,name,hp,ac,exp,thaco):
-        self.name=name
-        self.hp=hp
-        self.ac=ac
-        self.exp=exp
-        self.thaco=thaco
+# Function to provide characters race
+def char_race():
+     race_list=['Orc','Human','Elf','Dwarf']
+     while True:
+        race=input("Please select Your race (Orc/Elf/Human/Dwarf): ")
+        if race.isalpha() and race in race_list:
+            return race
+        else:
+            print("You must choose a valid race!")
+            continue
 
 
-class Monster:
-     def __init__(self,name,hp,ac,exp,thaco):
-        self.name=name
-        self.hp=hp
-        self.ac=ac
-        self.exp=exp
-        self.thaco=thaco
-
-
-class Zombie(Monster):
-    def __init__(self):
-        super().__init__(name="Zombie",
-                         hp=10,ac=5,
-                         exp=5,thaco=20)
-
-class Ghul(Monster):
-    def __init__(self):
-        super().__init__(name="Ghul",
-                         hp=12,ac=6,
-                         exp=4,thaco=20)
-
-class Skeleton(Monster):
-    def __init__(self):
-        super().__init__(name="Skeleton",
-                         hp=6,ac=2,
-                         exp=2,thaco=20)
-
-class Ghost(Monster):
-    def __init__(self):
-        super().__init__(name="Ghost",
-                         hp=5,ac=10,
-                         exp=6,thaco=20)
-
-class Fighter(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=10,
-                         exp=10,thaco=20)
-    def fight():
-        pass
-
-    PROF="FIGHTER"
-    MAX_HP=12
-    HD=8
-    LEVEL_2=20
-    COMMANDS = {
-        'f' : ('fight', fight)
-    }
-
-class Rogue(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=9,ac=10,
-                         exp=10,thaco=20)
-
-    def fight():
-        pass
-    def backstab():
-        pass
-
-    PROF="ROGUE"
-    MAX_HP=9
-    HD=6
-    LEVEL_2=15
-    COMMANDS = {
-        'f' : ('fight', fight),
-        'b' : ('backstab', backstab)
-    }
-
-
-
-class Mage(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=10,
-                         exp=10,thaco=20)
-
-    def fight():
-        pass
-
-    def generate_mana():
-        pass
-
-    def cast_spell():
-        pass
-
-    PROF="MAGE"
-    MAX_HP=5
-    HD=4
-    LEVEL_2=10
-    MANA=1
-    MAX_MANA=1
-    COMMANDS = {
-        'f' : ('fight', fight),
-        's' : ('spell', cast_spell),
-        'm' : ('mana', generate_mana)
-    }
-
-
-
+# Function to choose first chamber
+def first_chamber():
+    while True:
+        first_chamber={
+        'Left': 'Military quarters. Watch out for undead troops!!!',
+        'Center': 'Cellar. Something or someone can eat You here...Watch Your back...',
+        'Right': 'Servants quarters. Whats crawling below?'
+}
+        direction=input("Where would You like to go? (Left/Right/Center): ")
+        for key in first_chamber.items():
+            if direction in first_chamber:
+                return first_chamber[direction]
+            else:
+                print("Wrong direction, choose again...")
 def random_mob():
     mob=Zombie() if four_sided_die.roll()>2 else Ghul()
     return mob
-
 
 def profession():
     while True:
@@ -155,7 +73,7 @@ def profession():
 def PlayerAttack():
     roll=twenty_sided_die.roll()
     if roll >= hero.thaco-mob.ac:
-        print("Rolled " + str(roll) + "." +  "You hit the monster" )
+        print("Rolled " + str(roll) + "." +  "You hit the monster\n" )
         if hero.PROF==Fighter:
             rollD=ten_sided_die.roll()
 
@@ -165,22 +83,126 @@ def PlayerAttack():
         if hero.PROF==Mage:
             rollD=four_sided_die.roll()
     else:
-       print("You missed")
-hero = profession()
+       print("Rolled " + str(roll) + "." + "You missed")
 
+
+
+
+# Race selection
+
+var_race=char_race()
+if var_race=='Orc':
+    print("""
+
+
+
+You yawn widely, and scratch Your head. 'What happend yesterday? I can't remember anything...
+Last moment, last thing that I remember was this...person...thing...
+Who or what was that?'....
+...
+...
+...
+...
+...
+
+You see an old Orc Shaman, with only one eye.
+He's old, very old, even for orcish standards.
+'You come, me got gift for you' - screamed the old Orc.
+A sudden an unknown curiosity forced You to move towards him.
+'You take, no ask'
+The same curiosity told You to take the gift - strange looking key,
+with a strange, fiendish skull.
+'You know where, You sleep now' yelled the Shaman and when You started
+to realize whats happening, darkness came and You fell asleep.
+You woke up, near a strange looking mansion, with a key in Your pocket.
+'What the hell is going on?'
+Driven by the same feeling You had earlier, You take Your axe and start
+walking towards the building.
+
+
+
+
+""")
+elif var_race=='Elf':
+    print("""
+
+You wake up in Your house, deep in the woods.
+First lights of the autumn sun are slowly shining through the trees.
+You haven't slept well, all night driven by nightmares...
+But was it only a nightmare?...
+...
+...
+...
+...
+...
+
+You were chasing a strange looking creature, twisted and vile.
+For sure it wasn't something from this realm - dark red skin,
+long arms, short legs. Claws that could rip to shredds anything they catch.
+And those eyes - two frenzied fiery dots, which could fear every brave mortal.
+'Where did it came from? What this foul creature is doing here?
+I must not let it escape.'
+You were sending arrow after arrow, each shot closer to the target.
+'This creature is fast!' - You moaned.
+Suddenly it stopped just for a second, but that was enough to hit it in its head.
+You smiled to yourself and walked to the corpse.
+The creature had something in its hand - map and a strange looking key with a fiendish skull.
+'What is this? Where does this map....' - dream ends.
+...
+...
+...
+...
+'It was only a dream, nothing more.'
+You get up from the bed and look at the table.
+KEY!!!! The same key from your dream.
+And the map, showig direction to a strange looking mansion
+You dont know why, but took Your equipment and followed the map.
+After few days, you reached the house.
+'Why am I here?'
+You slowly walk towards the door...
+
+""")
+elif var_race=='Dwarf':
+    print("Dwarvish")
+elif var_race=='Human':
+    print("Humanish")
+
+# Profession selection
+
+hero = profession()
 print("Name: {}, HP: {}, AC: {}, EXP: {}, ATK: {}\n".format(
       hero.name, hero.hp, hero.ac, hero.exp, hero.thaco))
+
+
+# Enter the building
+
+while True:
+    start=input("Hit 'Enter' to enter the building: ")
+    if start=="":
+        print("You slowly enter the mansion")
+        break
+    else:
+        print("Are You sure You dont't want to know whats behind the door ?")
+        continue
+
+
+# Events based on first chamber selection
+var_firstChamber=first_chamber()
+print(var_firstChamber)
+
+mob=random_mob()
 
 for command, action in hero.COMMANDS.items():
     print("Press {} to {}".format(command, action[0]))
 
 while True:
     command = input("~~~~~~~Press key to continue~~~~~~~")
-    if command and command not in hero.COMMANDS:
+    if command not in hero.COMMANDS:
         print("Not a valid command")
         continue
     break
-print("You are fighting " + mob.name)
+print("You are fighting "  + mob.name)
+
 if command:
     hero.COMMANDS[command][1]()
     PlayerAttack()
