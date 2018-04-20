@@ -11,15 +11,17 @@ class Player:
 class Fighter(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=10,
-                         exp=10,thaco=20)
+                         hp=12,ac=6,
+                         exp=4,thaco=20)
     def fight():
         pass
 
     PROF="FIGHTER"
     MAX_HP=12
-    HD=8
-    LEVEL_2=20
+    HD=10
+    LEVEL=1
+    LEVEL_2=4
+    MAX_POWER=4
     COMMANDS = {
         'f' : ('fight', fight)
     }
@@ -27,7 +29,7 @@ class Fighter(Player):
 class Rogue(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=9,ac=10,
+                         hp=9,ac=4,
                          exp=10,thaco=20)
 
     def fight():
@@ -49,7 +51,7 @@ class Rogue(Player):
 class Mage(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=10,
+                         hp=12,ac=7,
                          exp=10,thaco=20)
 
     def fight():
@@ -74,4 +76,22 @@ class Mage(Player):
     }
 
 
-
+def profession():
+    while True:
+        letter_to_profession = {
+            'f': Fighter,
+            'r': Rogue,
+            'm': Mage
+        }
+        print("What is your class?\n")
+        for letter in letter_to_profession.keys():
+            print("- Press {} for {}".format(
+                letter, letter_to_profession[letter].__name__))
+        pclass = input(">>>")
+        if pclass in letter_to_profession:
+            return letter_to_profession[pclass]()
+            break
+        else:
+            print("You must choose a valid class...")
+            continue
+hero = profession()
