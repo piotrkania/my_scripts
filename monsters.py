@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from dice import *
 
 class Monster:
      def __init__(self,name,hp,ac,exp,thaco):
@@ -33,3 +34,9 @@ class Ghost(Monster):
         super().__init__(name="Ghost",
                          hp=5,ac=10,
                          exp=5,thaco=20)
+
+def random_mob():
+    mob=Zombie() if four_sided_die.roll()>2 else Ghul()
+    return mob
+
+mob = random_mob()
