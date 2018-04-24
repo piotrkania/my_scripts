@@ -31,17 +31,24 @@ def MonsterAttack():
         print(mob.name + " rolled " + str(roll) + " and missed.")
         print("")
 
-def Level_Up():
-    while hero.exp >= hero.LEVEL_2:
-        levelGain = False
-        hero.LEVEL += 1
-        levelGain = True
-        hero.LEVEL_2 = hero.LEVEL_2*2
-        if levelGain == True:
-            hp_gain = level_up_die.roll()
-            hero.MAX_HP += hp_gain
-            print("LEVEL UP!!! Gained " + str(hp_gain) + "HP.")
+while True:
+    if command:
+        hero.COMMANDS[command][1]()
+        PlayerAttack()
+        time.sleep(1)
+        if mob.hp > 0:
+            MonsterAttack()
+            time.sleep(1)
+            if hero.hp <= 0:
+                print("++++++You were killed++++++")
+                time.sleep(1)
+                break
+            else:
+                continue
+        elif mob.hp <= 0 and hero.hp > 0 :
+            print("++++++You killed " + mob.name+ "++++++")
             print("")
-            hero.hp = hero.MAX_HP
-            print("Name: {}, HP: {}, LEVEL: {}\n".format(
-                  hero.name, hero.hp, hero.LEVEL))
+            print("Gained " + str(mob.exp) + " XP.")
+            time.sleep(1)
+            break
+    Level_Up()
