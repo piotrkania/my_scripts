@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 class Player:
     def __init__(self,name,hp,ac,exp,thaco):
         self.name=name
@@ -18,10 +19,10 @@ class Fighter(Player):
 
     PROF="FIGHTER"
     MAX_HP=12
-    HD=10
+    HD=8
     LEVEL=1
     LEVEL_2=4
-    MAX_POWER=4
+    POWER=[1,2,3,4,5,6,7]
     COMMANDS = {
         'f' : ('fight', fight)
     }
@@ -30,7 +31,7 @@ class Rogue(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
                          hp=9,ac=4,
-                         exp=10,thaco=20)
+                         exp=4,thaco=20)
 
     def fight():
         pass
@@ -39,8 +40,9 @@ class Rogue(Player):
 
     PROF="ROGUE"
     MAX_HP=9
-    HD=6
+    LEVEL=1
     LEVEL_2=15
+    POWER=[1-7]
     COMMANDS = {
         'f' : ('fight', fight),
         'b' : ('backstab', backstab)
@@ -65,10 +67,11 @@ class Mage(Player):
 
     PROF="MAGE"
     MAX_HP=5
-    HD=4
+    LEVEL=1
     LEVEL_2=10
     MANA=1
     MAX_MANA=1
+    POWER=[1,2,3,4]
     COMMANDS = {
         'f' : ('fight', fight),
         's' : ('spell', cast_spell),
@@ -94,4 +97,5 @@ def profession():
         else:
             print("You must choose a valid class...")
             continue
+
 hero = profession()
