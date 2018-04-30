@@ -1,100 +1,84 @@
 #!/usr/bin/python3
 
+import random
+from dice import *
+from professions import *
+from monsters import *
+import time
 
-class Player:
-    def __init__(self,name,hp,ac,thaco):
-        self.name=name
-        self.hp=hp
-        self.ac=ac
-        self.thaco=thaco
-
-class Fighter(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=6,
-                         thaco=20)
-    def fight():
-        pass
-
-    PROF="FIGHTER"
-    MAX_HP=12
-    HD=8
-    LEVEL=1
-    EXP=1
-    LVL_EXP=4
-    POWER=[20]
-    COMMANDS = {
-        'f' : ('fight', fight)
-    }
-
-class Rogue(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=9,ac=4,
-                         thaco=20)
-
-    def fight():
-        pass
-    def backstab():
-        pass
-
-    PROF="ROGUE"
-    MAX_HP=9
-    LEVEL=1
-    LEVEL_2=15
-    POWER=[1-7]
-    COMMANDS = {
-        'f' : ('fight', fight),
-        'b' : ('backstab', backstab)
-    }
+def PlayerAttack():
+    roll=twenty_sided_die.roll()
+    if roll >= hero.thaco - mob.ac:
+        rollD = random.choice(hero.POWER)
+        print(hero.name + " rolled " + str(roll) + " and  hit " + mob.name + " for " + str(rollD) + " damage.")
+        print("")
+        mob.hp -= rollD
+        print(mob.name + " has " + str(mob.hp) + " hp left.")
+        print("")
+    else:
+        print(hero.name + " rolled " + str(roll) + " and missed.")
+        print("")
 
 
+def MonsterAttack():
+    roll=twenty_sided_die.roll()
+    if roll >= mob.thaco - hero.ac:
+        rollD = random.choice(mob.POWER)
+        print(mob.name + " rolled " + str(roll) + " and hits You for " + str(rollD) + " damage." )
+        print("")
+        hero.hp -= rollD
+        print(hero.name + " has " + str(hero.hp) + " hp left.")
+        print("")
+    else:
+        print(mob.name + " rolled " + str(roll) + " and missed.")
+        print("")
 
-class Mage(Player):
-    def __init__(self):
-        super().__init__(name=input("Whats Your name?: "),
-                         hp=12,ac=7,
-                         thaco=20)
+def Level_Up():
+    hero.LEVEL += 1
+    hero.LVL_EXP = hero.LVL_EXP*2
+    hp_gain = level_up_die.roll()
+    hero.MAX_HP += hp_gain
+    print("LEVEL UP!!! Gained " + str(hp_gain) + "HP.")
+    print("")
+    hero.hp = hero.MAX_HP
+    print("Name: {}, HP: {}, EXP: {}, LEVEL: {} \n".format(
+           hero.name, hero.hp, hero.EXP, hero.LEVEL))
 
-    def fight():
-        pass
-
-    def generate_mana():
-        pass
-
-    def cast_spell():
-        pass
-
-    PROF="MAGE"
-    MAX_HP=5
-    LEVEL=1
-    LEVEL_2=10
-    MANA=1
-    MAX_MANA=1
-    POWER=[1,2,3,4]
-    COMMANDS = {
-        'f' : ('fight', fight),
-        's' : ('spell', cast_spell),
-        'm' : ('mana', generate_mana)
-    }
-
-def profession():
+def encounter():
+    for command, action in hero.COMMANDS.items():
+        print("Press {} to {}".format(command, action[0]))
     while True:
-        letter_to_profession = {
-            'f': Fighter,
-            'r': Rogue,
-            'm': Mage
-        }
-        print("What is your class?\n")
-        for letter in letter_to_profession.keys():
-            print("- Press {} for {}".format(
-                letter, letter_to_profession[letter].__name__))
-        pclass = input(">>>")
-        if pclass in letter_to_profession:
-            return letter_to_profession[pclass]()
-            break
-        else:
-            print("You must choose a valid class...")
+        command = input("~~~~~~~Press key to continue~~~~~~~")
+        if command not in hero.COMMANDS:
+            print("Not a valid command")
             continue
-
-hero = profession()
+        print("You are fighting "  + mob.name)
+        print("")
+        time.sleep(1)
+        break
+    while True:
+        if command:
+            hero.COMMANDS[command][1]()
+            PlayerAttack()
+            time.sleep(1)
+            if mob.hp > 0:
+                MonsterAttack()
+                time.sleep(1)
+                if hero.hp <= 0:
+                    print("++++++You were killed++++++")
+                    break
+                    time.sleep(1)
+                else:
+                    continue
+            elif mob.hp <= 0 and hero.hp > 0 :
+                print("++++++You killed " + mob.name+ "++++++")
+                print("")
+                print("Gained " + str(mob.exp) + " XP.")
+                print("")
+                hero.EXP += mob.exp
+                if hero.EXP >= hero.LVL_EXP:
+                    Level_Up()
+                    break
+                break
+                time.sleep(1)
+            exit(0)
