@@ -2,18 +2,17 @@
 
 
 class Player:
-    def __init__(self,name,hp,ac,exp,thaco):
+    def __init__(self,name,hp,ac,thaco):
         self.name=name
         self.hp=hp
         self.ac=ac
-        self.exp=exp
         self.thaco=thaco
 
 class Fighter(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
                          hp=12,ac=6,
-                         exp=4,thaco=20)
+                         thaco=20)
     def fight():
         pass
 
@@ -21,8 +20,9 @@ class Fighter(Player):
     MAX_HP=12
     HD=8
     LEVEL=1
-    LEVEL_2=4
-    POWER=[1,2,3,4,5,6,7]
+    EXP=1
+    LVL_EXP=4
+    POWER=[20]
     COMMANDS = {
         'f' : ('fight', fight)
     }
@@ -31,7 +31,7 @@ class Rogue(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
                          hp=9,ac=4,
-                         exp=4,thaco=20)
+                         thaco=20)
 
     def fight():
         pass
@@ -54,7 +54,7 @@ class Mage(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
                          hp=12,ac=7,
-                         exp=10,thaco=20)
+                         thaco=20)
 
     def fight():
         pass
@@ -77,7 +77,6 @@ class Mage(Player):
         's' : ('spell', cast_spell),
         'm' : ('mana', generate_mana)
     }
-
 
 def profession():
     while True:
