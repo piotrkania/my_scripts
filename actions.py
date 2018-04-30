@@ -34,19 +34,12 @@ def MonsterAttack():
         print("")
 
 def Level_Up():
-    while hero.exp >= hero.LEVEL_2:
-        levelGain = False
-        hero.LEVEL += 1
-        levelGain = True
-        hero.LEVEL_2 = hero.LEVEL_2*2
-        if levelGain == True:
-            hp_gain = level_up_die.roll()
-            hero.MAX_HP += hp_gain
-            print("LEVEL UP!!! Gained " + str(hp_gain) + "HP.")
-            print("")
-            hero.hp = hero.MAX_HP
-            print("Name: {}, HP: {}, LEVEL: {}\n".format(
-                  hero.name, hero.hp, hero.LEVEL))
-        else :
-            hero.exp += mob.exp
-            print("Gained " + str(mob.exp) + " XP.")
+    hero.LEVEL += 1
+    hero.LVL_EXP = hero.LVL_EXP*2
+    hp_gain = level_up_die.roll()
+    hero.MAX_HP += hp_gain
+    print("LEVEL UP!!! Gained " + str(hp_gain) + "HP.")
+    print("")
+    hero.hp = hero.MAX_HP
+    print("Name: {}, HP: {}, EXP: {}, LEVEL: {} \n".format(
+           hero.name, hero.hp, hero.EXP, hero.LEVEL))
