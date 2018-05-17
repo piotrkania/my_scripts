@@ -7,48 +7,52 @@ from monsters import *
 from spells import *
 import time
 
+
 def PlayerAttack():
     roll = twenty_sided_die.roll()
     if roll >= hero.thaco - mob.ac :
         rollD = random.choice(hero.POWER)
-        print(hero.name + " rolled " + str(roll) + " and  hit " + mob.name + " for " + str(rollD) + " damage.")
-        print("")
+        print(hero.name + " rolled " + str(roll) + " and hit " + mob.name + " for " + str(rollD) + " damage.", "", sep="\n")
         mob.hp -= rollD
-        print(mob.name + " has " + str(mob.hp) + " hp left.")
-        print("")
+        print(mob.name + " has " + str(mob.hp) + " hp left.", "", sep="\n")
     else:
-        print(hero.name + " rolled " + str(roll) + " and missed.")
-        print("")
+        print(hero.name + " rolled " + str(roll) + " and missed.", "", sep="\n")
 
 
 def MonsterAttack():
     roll = twenty_sided_die.roll()
     if roll >= mob.thaco - hero.ac :
         rollD = random.choice(mob.POWER)
-        print(mob.name + " rolled " + str(roll) + " and hits You for " + str(rollD) + " damage." )
-        print("")
+        print(mob.name + " rolled " + str(roll) + " and hits You for " + str(rollD) + " damage.", "", sep="\n")
         hero.hp -= rollD
-        print(hero.name + " has " + str(hero.hp) + " hp left.")
-        print("")
+        print(hero.name + " has " + str(hero.hp) + " hp left.", "",  sep="\n")
     else:
-        print(mob.name + " rolled " + str(roll) + " and missed.")
-        print("")
+        print(mob.name + " rolled " + str(roll) + " and missed.", "", sep="\n")
+
 
 def CastSpell():
     roll = four_sided_die.roll()
-    if roll >= 2 :
-        print(hero.name + " rolled " + str(roll) + " and successfuly concentrated to prepare a spell")
-        print("")
-        spell = choose_spell()
-        spellD = random.choice(spell.DAMAGE)
-        print("You cast " + spell.name + " and deal " + str(spellD) + " damage to " + mob.name)
-        print("")
-        hero.mana -= spell.MANA
-        mob.hp -= spellD
-        print(mob.name + " has " + str(mob.hp) + " hp left.")
-    else:
-        print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.")
-        print("")
+    while True:
+        if hero.mana >= 1:
+            if roll >= 2 :
+                print(hero.name + " rolled " + str(roll) + " and successfuly concentrated to prepare a spell", "", sep="\n")
+                spell = choose_spell()
+                if hero.mana < spell.MANA:
+                    print("", "Not enough mana...", "", sep="\n")
+                    continue
+                else:
+                    spellD = random.choice(spell.DAMAGE)
+                    print("You cast " + spell.name + " and deal " + str(spellD) + " damage to " + mob.name, "", sep="\n")
+                    hero.mana -= spell.MANA
+                    mob.hp -= spellD
+                    print(mob.name + " has " + str(mob.hp) + " hp left.", "", sep="\n")
+                    print("You have " + str(hero.mana) + " mana left.", "", sep="\n")
+                    break
+            else:
+                print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.", "", sep="\n")
+                break
+        else:
+            continue
 
 
 def Level_Up():
@@ -57,22 +61,32 @@ def Level_Up():
     if hero.PROF == "FIGHTER":
         hp_gain = level_up_die.roll()
         hero.MAX_HP += hp_gain
-        print("LEVEL UP!!! Gained " + str(hp_gain) + "HP.")
-        print("")
+        print("LEVEL UP!!! Gained " + str(hp_gain) + "HP." "", sep="\n")
         hero.hp = hero.MAX_HP
-        print("Name: {}, HP: {}, EXP: {}, LEVEL: {} \n".format(
-              hero.name, hero.hp, hero.EXP, hero.LEVEL))
+        print("Name: {}, HP: {}, MP: {}, EXP: {}, LEVEL: {} \n".format(
+              hero.name, hero.hp, hero.mana, hero.EXP, hero.LEVEL))
     elif hero.PROF == "MAGE":
         hp_gain = level_up_die.roll()
         mana_gain = level_up_die.roll()
         hero.MAX_HP += hp_gain
         hero.MAX_MANA += mana_gain
-        print("LEVEL UP!!! Gained " + str(hp_gain) + " HP" + " and " + str(mana_gain) + " MP.")
-        print("")
+        print("LEVEL UP!!! Gained " + str(hp_gain) + " HP" + " and " + str(mana_gain) + " MP.", "", sep="\n")
         hero.hp = hero.MAX_HP
         hero.mana = hero.MAX_MANA
         print("Name: {}, HP: {}, MP: {},  EXP: {}, LEVEL: {} \n".format(
               hero.name, hero.hp, hero.mana, hero.EXP, hero.LEVEL))
+
+def loot():
+    while True:
+        rollL = loot_die.roll()
+        if rollL == 1:
+            loot_item = random.choice(mob.INVENTORY)
+            hero.INVENTORY.append(loot_item)
+            print("You search the corpse and found " + str(loot_item))
+            break
+        else:
+            print("You search the corpse but found nothing", "", sep="\n")
+            break
 
 
 def encounter():
@@ -83,12 +97,29 @@ def encounter():
         if command not in hero.COMMANDS:
             print("Not a valid command")
             continue
-        print("You are fighting "  + mob.name)
-        print("")
+        elif command == "i":
+            print(hero.INVENTORY)
+            continue
+        elif command == "h":
+            potion = 'Hg'
+            if potion in hero.INVENTORY:
+                hero.hp += item.HP
+                print("You healed for " + str(item.HP) + "HP", "", sep="\n")
+                continue
+            else:
+                print("You have no potion in your inventory", "", sep="\n")
+            continue
+        elif command == "m":
+            potion = 'Mana'
+            if potion in hero.INVENTORY:
+                hero.mana += item.MP
+                print("You restored " + str(item.MP) + " mana points.", "", sep="\n")
+        print("You are fighting "  + mob.name, "", sep="\n")
         time.sleep(1)
         break
     while True :
         if command == "f":
+            time.sleep(1)
             PlayerAttack()
             time.sleep(1)
             if mob.hp > 0:
@@ -101,20 +132,20 @@ def encounter():
                 else:
                     continue
             elif mob.hp <= 0 and hero.hp > 0:
-                print("++++++You killed " + mob.name + "++++++")
-                print("")
-                print("Gained " + str(mob.exp) + "XP.")
-                print("")
+                print("++++++You killed " + mob.name + "++++++", "", sep="\n")
+                print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
+                loot()
                 hero.EXP += mob.exp
                 mob.hp = mob.MAX_HP
                 if hero.EXP >= hero.LVL_EXP:
                     Level_Up()
                     break
-                break
+                else:
+                    hero.hp = hero.MAX_HP
                 time.sleep(1)
             break
         elif command == "s":
-            if hero.MANA >= 1:
+            if hero.mana >= 1:
                 CastSpell()
                 time.sleep(1)
                 if mob.hp > 0:
@@ -127,10 +158,9 @@ def encounter():
                     else:
                         continue
                 elif mob.hp <= 0 and hero.hp > 0:
-                    print("++++++You killed " + mob.name + "++++++")
-                    print("")
-                    print("Gained " + str(mob.exp) + "XP.")
-                    print("")
+                    print("++++++You killed " + mob.name + "++++++", "", sep="\n")
+                    print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
+                    loot()
                     hero.EXP += mob.exp
                     hero.mana = hero.MAX_MANA
                     mob.hp = mob.MAX_HP
@@ -139,7 +169,29 @@ def encounter():
                         break
                     break
                     time.sleep(1)
-            elif hero.MANA < 1:
-                print("Not enough mana")
-                continue
+            elif hero.mana < 1:
+                print("Not enough mana", "", sep="\n")
+                print("Melee attack", "", sep="\n")
+                PlayerAttack()
+                time.sleep(1)
+                if mob.hp > 0:
+                    MonsterAttack()
+                    time.sleep(1)
+                    if hero.hp <= 0:
+                        print("++++++You were killed++++++")
+                        break
+                        time.sleep(1)
+                    else:
+                        continue
+                elif mob.hp <= 0 and hero.hp > 0:
+                    print("++++++You killed " + mob.name + "++++++", "", sep="\n")
+                    print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
+                    hero.EXP += mob.exp
+                    mob.hp = mob.MAX_HP
+                    if hero.EXP >= hero.LVL_EXP:
+                        Level_Up()
+                        break
+                    break
+                    time.sleep(1)
+                break
             break
