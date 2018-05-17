@@ -17,6 +17,12 @@ class Fighter(Player):
     def fight():
         pass
 
+    def inventory():
+        pass
+
+    def heal():
+        pass
+
     PROF = "FIGHTER"
     MAX_HP = 12
     HD = 8
@@ -27,9 +33,12 @@ class Fighter(Player):
     MAX_MANA = 0
     POWER = [20]
     COMMANDS = {
-        'f' : ('fight', fight)
+        'f' : ('fight', fight),
+        'h' : ('heal', heal),
+        'i' : ('inventory', inventory)
     }
 
+    INVENTORY = []
 
 
 class Rogue(Player):
@@ -44,6 +53,12 @@ class Rogue(Player):
     def backstab():
         pass
 
+    def inventory():
+        pass
+
+    def heal():
+        pass
+
     PROF = "ROGUE"
     MAX_HP = 9
     HD = 6
@@ -55,9 +70,12 @@ class Rogue(Player):
     POWER = [1, 2 , 3, 4, 5, 6, 7]
     COMMANDS = {
         'f' : ('fight', fight),
-        'b' : ('backstab', backstab)
+        'b' : ('backstab', backstab),
+        'h' : ('heal', heal),
+        'i' : ('inventory', inventory)
     }
 
+    INVENTORY = []
 
 
 class Mage(Player):
@@ -75,6 +93,12 @@ class Mage(Player):
     def cast_spell():
         pass
 
+    def inventory():
+        pass
+
+    def heal():
+        pass
+
     PROF = "MAGE"
     MAX_HP = 5
     HD = 4
@@ -87,9 +111,12 @@ class Mage(Player):
     COMMANDS = {
         'f' : ('fight', fight),
         's' : ('spell', cast_spell),
-        'm' : ('mana', generate_mana)
+        'm' : ('mana', generate_mana),
+        'h' : ('heal', heal),
+        'i' : ('inventory', inventory)
     }
 
+    INVENTORY = []
 
 def profession():
     while True:
