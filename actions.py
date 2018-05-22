@@ -9,6 +9,8 @@ import time
 
 
 def PlayerAttack():
+    """ This function defines how the player character attacks """
+    
     roll = twenty_sided_die.roll()
     if roll >= hero.thaco - mob.ac :
         rollD = random.choice(hero.POWER)
@@ -20,6 +22,8 @@ def PlayerAttack():
 
 
 def MonsterAttack():
+    """ This function defines how the monster character attacks """
+    
     roll = twenty_sided_die.roll()
     if roll >= mob.thaco - hero.ac :
         rollD = random.choice(mob.POWER)
@@ -31,6 +35,8 @@ def MonsterAttack():
 
 
 def CastSpell():
+    """ This function defines how the spells are being generated and casted by player character """
+    
     roll = four_sided_die.roll()
     while True:
         if hero.mana >= 1:
@@ -56,6 +62,8 @@ def CastSpell():
 
 
 def Level_Up():
+    """ This function defines how and when player charcters gains experience and level up """
+    
     hero.LEVEL += 1
     hero.LVL_EXP = hero.LVL_EXP*2
     if hero.PROF == "FIGHTER":
@@ -77,6 +85,8 @@ def Level_Up():
               hero.name, hero.hp, hero.mana, hero.EXP, hero.LEVEL))
 
 def loot():
+    """ This functions defines how player character gathers loot """
+    
     while True:
         rollL = loot_die.roll()
         if rollL == 1:
@@ -90,6 +100,10 @@ def loot():
 
 
 def encounter():
+    
+ """ This function defines player character encounter with a random monster, dpeneding of the choosen command,
+ player / monster takes appropriate action """
+ 
     for command, action in hero.COMMANDS.items():
         print("Press {} to {}".format(command, action[0]))
     while True:
