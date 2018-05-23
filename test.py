@@ -6,11 +6,8 @@ from dice import *
 from actions import *
 from monsters import *
 import time
-import races
-import spells
 
 # Profession selection
-
 print("Name: {}, HP: {}, AC: {}, EXP: {}, ATK: {}\n".format(
       hero.name, hero.hp, hero.ac, hero.EXP, hero.thaco))
 
@@ -20,3 +17,19 @@ print("Name: {}, HP: {}, AC: {}, EXP: {}, ATK: {}\n".format(
 print("You encountered a monster!!! Defend Yourself")
 
 
+# Fight mob
+encounter()
+
+print("", "again", "", sep="\n")
+
+encounter()
+
+
+print("", "And again", "",  sep="\n")
+
+encounter()
+
+
+print("", "And last time", "", sep="\n")
+
+encounter()
