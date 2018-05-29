@@ -4,13 +4,15 @@ from professions import *
 from monsters import *
 import time
 from spells import *
+from items import *
 
-def PlayerAttack():
+
+def player_attack():
     """ This function defines how the player character attacks, depending on the roll of 20-sided Die """
 
     roll = twenty_sided_die.roll()
     if roll >= hero.thaco - mob.ac:
-        rollD = random.choice(hero.POWER)
+        rollD = random.choice(hero.ATK)
         print(hero.name + " rolled " + str(roll) + " and hit " + mob.name + " for " + str(rollD) + " damage.", "",
               sep="\n")
         mob.hp -= rollD
@@ -19,12 +21,12 @@ def PlayerAttack():
         print(hero.name + " rolled " + str(roll) + " and missed.", "", sep="\n")
 
 
-def MonsterAttack():
+def monster_attack():
     """ This function defines how the monster character attacks,  depending on the roll of 20-sided Die """
 
     roll = twenty_sided_die.roll()
     if roll >= mob.thaco - hero.ac:
-        rollD = random.choice(mob.POWER)
+        rollD = random.choice(mob.ATK)
         print(mob.name + " rolled " + str(roll) + " and hits You for " + str(rollD) + " damage.", "", sep="\n")
         hero.hp -= rollD
         print(hero.name + " has " + str(hero.hp) + " hp left.", "", sep="\n")
@@ -38,14 +40,14 @@ def cast_spell():
 
     roll = four_sided_die.roll()
     if roll >= 2:
-        print(hero.name + " rolled " + str(roll) + " and successfuly concentrated to prepare a spell", "",
+        print(hero.name + " rolled " + str(roll) + " and successfully concentrated to prepare a spell", "",
               sep="\n")
         spell = choose_spell()
         while True:
             if hero.mana >= spell.MANA:
                 spellD = random.choice(spell.DAMAGE)
                 print("You cast " + spell.name + " and deal " + str(spellD) + " damage to " + mob.name, "",
-                    sep="\n")
+                      sep="\n")
                 hero.mana -= spell.MANA
                 mob.hp -= spellD
                 print(mob.name + " has " + str(mob.hp) + " hp left.", "", sep="\n")
@@ -58,8 +60,8 @@ def cast_spell():
         print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.", "", sep="\n")
 
 
-def Level_Up():
-    """ This function defines how and when player charcters gains experience and level up """
+def level_up():
+    """ This function defines how and when player characters gains experience and level up """
 
     hero.LEVEL += 1
     hero.LVL_EXP = hero.LVL_EXP * 2
@@ -98,7 +100,7 @@ def loot():
 
 
 def encounter():
-    """ This function defines player character encounter with a random monster, dpeneding of the choosen command,
+    """ This function defines player character encounter with a random monster, depending of the chosen command,
     player / monster takes appropriate action """
 
     while True:
@@ -131,24 +133,24 @@ def encounter():
                     continue
             elif command == "f":
                 time.sleep(1)
-                PlayerAttack()
+                player_attack()
                 time.sleep(1)
                 if mob.hp > 0:
-                    MonsterAttack()
+                    monster_attack()
                     time.sleep(1)
                     if hero.hp <= 0:
                         print("++++++You were killed++++++")
                         break
                     else:
                         continue
-                elif mob.hp <= 0 and hero.hp > 0:
+                elif mob.hp <= 0:
                     print("++++++You killed " + mob.name + "++++++", "", sep="\n")
                     print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
                     loot()
                     hero.EXP += mob.exp
                     mob.hp = mob.MAX_HP
                     if hero.EXP >= hero.LVL_EXP:
-                        Level_Up()
+                        level_up()
                         break
                     else:
                         hero.hp = hero.MAX_HP
@@ -158,7 +160,7 @@ def encounter():
                 cast_spell()
                 time.sleep(1)
                 if mob.hp > 0:
-                    MonsterAttack()
+                    monster_attack()
                     time.sleep(1)
                     if hero.hp <= 0:
                         print("++++++You were killed++++++")
@@ -172,7 +174,7 @@ def encounter():
                     hero.EXP += mob.exp
                     mob.hp = mob.MAX_HP
                     if hero.EXP >= hero.LVL_EXP:
-                        Level_Up()
+                        level_up()
                         break
                     else:
                         hero.hp = hero.MAX_HP
