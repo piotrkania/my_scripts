@@ -40,7 +40,7 @@ def choose_spell():
                 short, short_to_spell[short].__name__))
         pick_spell = input(">>>")
         if pick_spell in short_to_spell:
-            return short_to_spell[chooseSpell]()
+            return short_to_spell[pick_spell]()
         else:
             print("You must choose a valid spell...")
             continue
