@@ -1,8 +1,3 @@
-#!/usr/bin/python3
-
-import welcome
-from professions import *
-from dice import *
 from actions import *
 from monsters import *
 import time
@@ -14,22 +9,20 @@ print("Name: {}, HP: {}, AC: {}, EXP: {}, ATK: {}\n".format(
 
 # Mob encounter
 
-print("You encountered a monster!!! Defend Yourself")
+print("You encountered " + mob.name + "!!! Defend Yourself", "", sep="\n")
 
 
 # Fight mob
 encounter()
-
 print("", "again", "", sep="\n")
+time.sleep(1)
 
 encounter()
-
-
 print("", "And again", "",  sep="\n")
+time.sleep(1)
 
 encounter()
-
-
 print("", "And last time", "", sep="\n")
+time.sleep(1)
 
 encounter()
