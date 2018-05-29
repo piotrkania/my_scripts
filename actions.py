@@ -6,7 +6,7 @@ import time
 from spells import *
 
 def PlayerAttack():
-    """ This function defines how the player character attacks """
+    """ This function defines how the player character attacks, depending on the roll of 20-sided Die """
 
     roll = twenty_sided_die.roll()
     if roll >= hero.thaco - mob.ac:
@@ -20,7 +20,7 @@ def PlayerAttack():
 
 
 def MonsterAttack():
-    """ This function defines how the monster character attacks """
+    """ This function defines how the monster character attacks,  depending on the roll of 20-sided Die """
 
     roll = twenty_sided_die.roll()
     if roll >= mob.thaco - hero.ac:
@@ -33,21 +33,27 @@ def MonsterAttack():
 
 
 def cast_spell():
+    """ This function defines how the Player character cast spells. There is 50/50 chance that Player will
+        fail/succeed preparing a spell """
+
     roll = four_sided_die.roll()
     if roll >= 2:
         print(hero.name + " rolled " + str(roll) + " and successfuly concentrated to prepare a spell", "",
               sep="\n")
         spell = choose_spell()
-        if hero.mana > spell.MANA:
-            spellD = random.choice(spell.DAMAGE)
-            print("You cast " + spell.name + " and deal " + str(spellD) + " damage to " + mob.name, "",
-                sep="\n")
-            hero.mana -= spell.MANA
-            mob.hp -= spellD
-            print(mob.name + " has " + str(mob.hp) + " hp left.", "", sep="\n")
-            print("You have " + str(hero.mana) + " mana left.", "", sep="\n")
-        else:
-            print("", "Not enough mana...", "", sep="\n")
+        while True:
+            if hero.mana >= spell.MANA:
+                spellD = random.choice(spell.DAMAGE)
+                print("You cast " + spell.name + " and deal " + str(spellD) + " damage to " + mob.name, "",
+                    sep="\n")
+                hero.mana -= spell.MANA
+                mob.hp -= spellD
+                print(mob.name + " has " + str(mob.hp) + " hp left.", "", sep="\n")
+                print("You have " + str(hero.mana) + " mana left.", "", sep="\n")
+                break
+            else:
+                print("", "Not enough mana...", "", sep="\n")
+                return cast_spell()
     else:
         print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.", "", sep="\n")
 
@@ -77,7 +83,7 @@ def Level_Up():
 
 
 def loot():
-    """ This functions defines how player character gathers loot """
+    """ This functions defines how player character gathers loot after defeating an enemy(mob) """
 
     while True:
         rollL = loot_die.roll()
@@ -95,16 +101,14 @@ def encounter():
     """ This function defines player character encounter with a random monster, dpeneding of the choosen command,
     player / monster takes appropriate action """
 
-    for command, action in hero.COMMANDS.items():
-        print("Press {} to {}".format(command, action[0]))
     while True:
+        for command, action in hero.COMMANDS.items():
+            print("Press {} to {}".format(command, action[0]))
         command = input("~~~~~~~Press key to continue~~~~~~~")
         if command not in hero.COMMANDS:
             print("Not a valid command")
             continue
         else:
-            print("You are fighting " + mob.name, "", sep="\n")
-            time.sleep(1)
             if command == "i":
                 print(hero.INVENTORY)
                 continue
@@ -174,5 +178,4 @@ def encounter():
                         hero.hp = hero.MAX_HP
                     time.sleep(1)
                     break
-                break
             break
