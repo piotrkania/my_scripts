@@ -8,7 +8,7 @@ class Fireball(Spells):
         super().__init__(name="Fireball")
 
     DAMAGE = [1]
-    MANA = 3
+    MANA = 5
 
 
 class Frostbolt(Spells):
@@ -36,7 +36,7 @@ def choose_spell():
         }
         print("Choose spell\n")
         for short in short_to_spell.keys():
-            print("- Press {} for {}".format(
+            print("- Type {} to cast {}".format(
                 short, short_to_spell[short].__name__))
         pick_spell = input(">>>")
         if pick_spell in short_to_spell:
