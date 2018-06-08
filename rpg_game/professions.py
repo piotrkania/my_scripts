@@ -1,51 +1,130 @@
 from dice import *
+from weapons import *
 from monsters import *
 from potions import *
-from weapons import *
 import time
 from spells import *
 
 
-def equipment():
-    eq = [short_sword, long_sword, bastard_sword, two_handed_sword]
-    while True:
-        for i in eq:
-            return i
-
-
-item = equipment()
-
-
 class Player:
 
-    EQUIPMENT_SLOTS = {'head': None, 'chest': None, 'bracers': None, "belt": None, "legs": None, 'boots': None,
-                       'necklace': None, 'l_ring': None, 'r_ring': None, 'hand': None, 'off_hand': None}
+    EQUIPMENT_SLOTS = {'Head': None, 'Chest': None, 'Bracers': None, "Belt": None, "Legs": None, 'Boots': None,
+                       'Necklace': None, 'Left ring': None, 'Right ring': None, 'Hand': None, 'Off-hand': None}
 
-    def __init__(self, name, hp, ac, mana, thaco):
+    def __init__(self, name, hp, ac, mana):
         self.name = name
         self.hp = hp
         self.ac = ac
         self.mana = mana
-        self.thaco = thaco
+        self.thaco = 20
+
+
+
+    @staticmethod
+    def check_stats():
+        """ This method prints current Player character stats"""
+
+        print("Name: {}, HP: {}, MANA: {}, AC: {}, EXP: {}, ATK: {}\n".format(
+            hero.name, hero.hp, hero.mana, hero.ac, hero.EXP, hero.thaco))
+
+    @staticmethod
+    def check_equipment():
+        """ This method prints items currently equipped in each slot"""
+
+        slots = hero.EQUIPMENT_SLOTS
+        for k, v in slots.items():
+            print('%s: %s' % (k, v))
 
     @staticmethod
     def heal():
-        potion = heal_potion
-        if potion in hero.INVENTORY:
-            hero.hp += HpPotion.HP
-            hero.INVENTORY.remove(potion)
-            print("You healed for " + str(HpPotion.HP) + "HP", "", sep="\n")
+        """ This method defines how hit points (HP) points are being restored. If restored HPs exceeds Players
+        MAX_HP, players HP will be set to MAX_HP"""
+
+        while heal_pot in hero.INVENTORY:
+            hero.hp += heal_pot.HP
+            print("", "You healed for " + str(heal_pot.HP) + "HP", "", sep="\n")
+            hero.INVENTORY.remove(heal_pot)
+            if hero.hp > hero.MAX_HP:
+                hero.hp = hero.MAX_HP
+            break
         else:
-            print("You have no healing potion in your inventory", "", sep="\n")
+            print("", "You have no healing potion in your inventory", "", sep="\n")
+
+    @staticmethod
+    def refresh_mana():
+        """ This method defines how mana points are being restored"""
+
+        while mana_pot in hero.INVENTORY:
+            hero.mana += mana_pot.MP
+            print("", "You restored " + str(mana_pot.MP) + "MP", "", sep="\n")
+            hero.INVENTORY.remove(mana_pot)
+            if hero.mana > hero.MAX_MANA:
+                hero.mana = hero.MAX_MANA
+            break
+        else:
+            print("", "You have no mana potion in your inventory", "", sep="\n")
 
     def inventory(self):
+        """ This method prints Players inventory """
+
+        if not hero.INVENTORY:
+            print("\n", "Inventory is empty", "\n")
+        else:
+            for it in hero.INVENTORY:
+                print(it.__str__())
+
+    @staticmethod
+    def equip_hand():
+        print("Press {} to equip Short sword".format('s'))
+        print("Press {} to equip Long sword".format('l'))
+        print("Press {} to equip Bastard sword".format('b'))
+        weap = input(">>>>")
+        from actions import battle
+        if weap == 's':
+            while short_sword in hero.INVENTORY:
+                hero.ATK += short_sword.ATK
+                hero.INVENTORY.remove(short_sword)
+                print("Your ATK increased by " + str(short_sword.ATK))
+                battle()
+            else:
+                print("You do not have it in Your inventory")
+                battle()
+        elif weap == "l":
+            while long_sword in hero.INVENTORY:
+                hero.ATK += long_sword.ATK
+                hero.INVENTORY.remove(long_sword)
+                print("Your ATK increased by " + str(long_sword.ATK))
+                battle()
+            else:
+                print("You do not have it in Your inventory")
+                battle()
+        elif weap == "b":
+            while bastard_Sword in hero.INVENTORY:
+                hero.ATK += bastard_Sword.ATK
+                hero.INVENTORY.remove(bastard_Sword)
+                print("Your ATK increased by " + str(bastard_Sword.ATK))
+                battle()
+            else:
+                print("You do not have it in Your inventory")
+                battle()
+
+    @staticmethod
+    def equip():
+        n = 0
         while True:
-            print(hero.INVENTORY)
-            break
+            for k in slot.keys():
+                n += 1
+                print("Press {} to equip {}".format(n, '%s' % k))
+            option = input("Choose slot You wish to equip >>>>> ")
+            if option == "10":
+                Player.equip_hand()
+            else:
+                print("Choose the correct slot")
+                continue
 
     @staticmethod
     def player_attack():
-        """ This function defines how the player character attacks, depending on the roll of 20-sided Die """
+        """ This method defines how the player character attacks, depending on the roll of 20-sided Die """
 
         roll = twenty_sided_die.roll()
         if roll >= hero.thaco - mob.ac:
@@ -59,7 +138,7 @@ class Player:
 
     @staticmethod
     def monster_attack():
-        """ This function defines how the monster character attacks,  depending on the roll of 20-sided Die """
+        """ This method defines how the monster character attacks,  depending on the roll of 20-sided Die """
 
         roll = twenty_sided_die.roll()
         if roll >= mob.thaco - hero.ac:
@@ -72,7 +151,7 @@ class Player:
 
     @staticmethod
     def level_up():
-        """ This function defines how and when player characters gains experience and level up """
+        """ This method defines how and when player characters gains experience and level up """
 
         hero.LEVEL += 1
         hero.LVL_EXP = hero.LVL_EXP * 2
@@ -96,7 +175,8 @@ class Player:
 
     @staticmethod
     def loot():
-        """ This functions defines how player character gathers loot after defeating an enemy(mob). """
+        """ This method defines how player character gathers loot after defeating an enemy(mob). """
+
         while True:
             rollL = loot_die.roll()
             if rollL == 1:
@@ -110,6 +190,8 @@ class Player:
 
     @staticmethod
     def fight():
+        """ This method defines how the melee fight is being performed """
+
         while True:
             time.sleep(1)
             hero.player_attack()
@@ -122,7 +204,7 @@ class Player:
                     break
                 else:
                     continue
-            elif mob.hp <= 0:
+            else:
                 print("++++++You killed " + mob.name + "++++++", "", sep="\n")
                 print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
                 hero.loot()
@@ -131,24 +213,12 @@ class Player:
                 if hero.EXP >= hero.LVL_EXP:
                     hero.level_up()
                     break
-                else:
-                    hero.hp = hero.MAX_HP
                 time.sleep(1)
-            break
+                break
 
     @staticmethod
-    def generate_mana():
-        potion = mana_potion
-        if potion in hero.INVENTORY:
-            hero.mana += MpPotion.MP
-            hero.INVENTORY.remove(potion)
-            print("You restored " + str(MpPotion.MP) + " mana points.", "", sep="\n")
-        else:
-            print("You have no mana potion in your inventory", "", sep="\n")
-
-    @staticmethod
-    def cast_spell():
-        """ This function defines how the Player character cast spells. There is 50/50 chance that Player will
+    def prepare_spell():
+        """ This method defines how the Player character cast spells. There is 50/50 chance that Player will
             fail/succeed preparing a spell """
 
         roll = four_sided_die.roll()
@@ -169,16 +239,44 @@ class Player:
                 else:
                     print("", "Not enough mana...", "", sep="\n")
                     break
-
         else:
             print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.", "", sep="\n")
+
+    @staticmethod
+    def cast_spell():
+        """ This method defines how Player character casts spell"""
+
+        while True:
+            Player.prepare_spell()
+            if mob.hp > 0:
+                Player.monster_attack()
+                time.sleep(1)
+                if hero.hp <= 0:
+                    print("++++++You were killed++++++")
+                    time.sleep(1)
+                    break
+                else:
+                    from actions import battle
+                    battle()
+            else:
+                print("++++++You killed " + mob.name + "++++++", "", sep="\n")
+                print("Gained " + str(mob.exp) + "XP.", "", sep="\n")
+                Player.loot()
+                hero.EXP += mob.exp
+                mob.hp = mob.MAX_HP
+                if hero.EXP >= hero.LVL_EXP:
+                    Player.level_up()
+                    break
+                else:
+                    hero.hp = hero.MAX_HP
+                time.sleep(1)
+                break
 
 
 class Fighter(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=12, ac=6, mana=0,
-                         thaco=20)
+                         hp=12, ac=6, mana=0)
 
     def fight(self):
         super().fight()
@@ -189,29 +287,40 @@ class Fighter(Player):
     def inventory(self):
         super().inventory()
 
+    def check_equipment(self):
+        super().check_equipment()
+
+    def check_stats(self):
+        super().check_stats()
+
+    def equip(self):
+        super().equip()
+
     PROF = "FIGHTER"
     MAX_HP = 12
     HD = 8
     LEVEL = 1
     EXP = 1
-    LVL_EXP = 4
+    LVL_EXP = 40
     MANA = 0
     MAX_MANA = 0
-    ATK = [20]
+    ATK = 20
     COMMANDS = {
         'f': ('fight', fight),
         'h': ('heal', heal),
-        'i': ('check inventory', inventory)
+        'i': ('check inventory', inventory),
+        'e': ('check equipment', check_equipment),
+        'c': ('check stats', check_stats),
+        'eq': ('equip item', equip)
     }
 
-    INVENTORY = [heal_potion, heal_potion]
+    INVENTORY = [heal_pot, heal_pot, short_sword, long_sword]
 
 
 class Rogue(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=9, ac=4, mana=0,
-                         thaco=20)
+                         hp=9, ac=4, mana=0)
 
     def fight(self):
         super().fight()
@@ -224,6 +333,15 @@ class Rogue(Player):
 
     def backstab(self):
         pass
+
+    def check_equipment(self):
+        super().check_equipment()
+
+    def check_stats(self):
+        super().check_stats()
+
+    def equip(self):
+        super().equip()
 
     PROF = "ROGUE"
     MAX_HP = 9
@@ -238,7 +356,10 @@ class Rogue(Player):
         'f': ('fight', fight),
         'b': ('backstab', backstab),
         'h': ('heal', heal),
-        'i': ('check inventory', inventory)
+        'i': ('check inventory', inventory),
+        'e': ('check equipment', check_equipment),
+        'c': ('check stats', check_stats),
+        'eq': ('equip item', equip)
     }
 
     INVENTORY = []
@@ -247,8 +368,7 @@ class Rogue(Player):
 class Mage(Player):
     def __init__(self):
         super().__init__(name=input("Whats Your name?: "),
-                         hp=700, ac=7, mana=5,
-                         thaco=20)
+                         hp=500, ac=7, mana=5)
 
     def fight(self):
         super().fight()
@@ -259,11 +379,20 @@ class Mage(Player):
     def inventory(self):
         super().inventory()
 
-    def generate_mana(self):
-        super().generate_mana()
+    def refresh_mana(self):
+        super().refresh_mana()
 
     def cast_spell(self):
         super().cast_spell()
+
+    def check_equipment(self):
+        super().check_equipment()
+
+    def check_stats(self):
+        super().check_stats()
+
+    def equip(self):
+        super().equip()
 
     PROF = "MAGE"
     MAX_HP = 500
@@ -277,12 +406,15 @@ class Mage(Player):
     COMMANDS = {
         'f': ('fight', fight),
         's': ('cast spell', cast_spell),
-        'm': ('generate mana', generate_mana),
+        'm': ('restore mana', refresh_mana),
         'h': ('heal', heal),
-        'i': ('check inventory', inventory)
+        'i': ('check inventory', inventory),
+        'e': ('check equipment', check_equipment),
+        'c': ('check stats', check_stats),
+        'eq': ('equip item', equip)
     }
 
-    INVENTORY = [heal_potion, mana_potion]
+    INVENTORY = [heal_pot, mana_pot, mana_pot, heal_pot, heal_pot, heal_pot]
 
 
 def profession():
@@ -305,4 +437,5 @@ def profession():
 
 
 hero = profession()
+slot = hero.EQUIPMENT_SLOTS
 level_up_die = Die(hero.HD)

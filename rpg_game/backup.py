@@ -55,7 +55,7 @@ def cast_spell():
                 break
             else:
                 print("", "Not enough mana...", "", sep="\n")
-                return cast_spell()
+                break
     else:
         print(hero.name + " rolled " + str(roll) + " and failed to prepare a spell.", "", sep="\n")
 
@@ -170,3 +170,6 @@ def encounter():
                     time.sleep(1)
                     break
             break
+
+
+encounter()

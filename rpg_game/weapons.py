@@ -1,46 +1,47 @@
 class Sword:
-    def __init__(self,name,ATK):
+    def __init__(self, name, ATK, type):
         self.name = name
         self.ATK = ATK
+        self.type = type
 
 
 class ShortSword(Sword):
     def __init__(self):
         super(ShortSword, self).__init__(name="Short Sword",
-                                         ATK=1)
+                                         ATK=10, type="weapon")
 
     def __str__(self):
-        return "Short Sword"
+        return str(self.name)
 
 
 class LongSword(Sword):
     def __init__(self):
         super(LongSword, self).__init__(name="Long Sword",
-                                        ATK=2)
+                                        ATK=1, type="weapon")
 
     def __str__(self):
-        return "Long Sword"
+        return str(self.name)
 
 
 class BastardSword(Sword):
     def __init__(self):
         super(BastardSword, self).__init__(name="Bastard Sword",
-                                           ATK=3)
+                                           ATK=3, type="weapon")
 
     def __str__(self):
-        return "Bastard Sword"
+        return str(self.name)
 
 
 class TwoHandedSword(Sword):
     def __init__(self):
         super(TwoHandedSword, self).__init__(name="Two Handed Sword",
-                                             ATK=5)
+                                             ATK=5, type="weapon")
 
     def __str__(self):
-        return "Two Handed Sword"
+        return str(self.name)
 
 
-short_sword = ShortSword().__str__()
-long_sword = LongSword().__str__()
-bastard_sword = BastardSword().__str__()
-two_handed_sword = TwoHandedSword().__str__()
+short_sword = ShortSword()
+long_sword = LongSword()
+bastard_Sword = BastardSword()
+two_handed_sword = TwoHandedSword()
