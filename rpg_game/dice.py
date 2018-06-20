@@ -1,4 +1,3 @@
-from professions import *
 from random import randint
 
 

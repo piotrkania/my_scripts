@@ -1,11 +1,14 @@
 class Potion:
-    def __init__(self, name):
+    def __init__(self, name, type, value):
         self.name = name
+        self.type = type
+        self.value = value
 
 
 class HpPotion(Potion):
     def __init__(self):
-        super().__init__(name="HP Potion")
+        super().__init__(name="HP Potion", type="heal",
+                         value=5)
 
     HP = 3
 
@@ -15,7 +18,8 @@ class HpPotion(Potion):
 
 class MpPotion(Potion):
     def __init__(self):
-        super().__init__(name="MP Potion")
+        super().__init__(name="MP Potion", type="mana",
+                         value=5)
 
     MP = 3
 
@@ -23,5 +27,5 @@ class MpPotion(Potion):
         return str(self.name)
 
 
-heal_potion = HpPotion().__str__()
-mana_potion = MpPotion().__str__()
+heal_pot = HpPotion()
+mana_pot = MpPotion()
