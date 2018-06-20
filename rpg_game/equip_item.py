@@ -1,6 +1,5 @@
-from professions import *
-from weapons import *
 from actions import *
+
 
 def equip_hand():
     print("Press {} to equip Short sword".format('s'))

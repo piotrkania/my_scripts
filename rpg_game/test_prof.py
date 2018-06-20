@@ -1,5 +1,6 @@
+from weapons import *
 from professions import *
-
+from actions import *
 
 slot = hero.EQUIPMENT_SLOTS
 
@@ -27,8 +28,8 @@ def equip_hand():
         while short_sword in hero.INVENTORY:
             hero.ATK += short_sword.ATK
             hero.INVENTORY.remove(short_sword)
-            print(hero.ATK)
-            from actions import *
+            slot.
+            print("Your hero attack increased by " + str(short_sword.ATK))
             battle()
         else:
             print("You do not have it in Your inventory")
@@ -36,7 +37,8 @@ def equip_hand():
         while long_sword in hero.INVENTORY:
             hero.ATK += long_sword.ATK
             hero.INVENTORY.remove(long_sword)
-            print(hero.ATK)
+            print("Your hero attack increased by " + str(long_sword.ATK))
+            battle()
             break
         else:
             print("You do not have it in Your inventory")
@@ -44,7 +46,8 @@ def equip_hand():
         while bastard_Sword in hero.INVENTORY:
             hero.ATK += bastard_Sword.ATK
             hero.INVENTORY.remove(bastard_Sword)
-            print(hero.ATK)
+            print("Your hero attack increased by " + str(bastard_Sword.ATK))
+            battle()
             break
         else:
             print("You do not have it in Your inventory")

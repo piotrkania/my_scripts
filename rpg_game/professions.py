@@ -18,15 +18,6 @@ class Player:
         self.mana = mana
         self.thaco = 20
 
-
-
-    @staticmethod
-    def check_stats():
-        """ This method prints current Player character stats"""
-
-        print("Name: {}, HP: {}, MANA: {}, AC: {}, EXP: {}, ATK: {}\n".format(
-            hero.name, hero.hp, hero.mana, hero.ac, hero.EXP, hero.thaco))
-
     @staticmethod
     def check_equipment():
         """ This method prints items currently equipped in each slot"""
@@ -74,42 +65,8 @@ class Player:
                 print(it.__str__())
 
     @staticmethod
-    def equip_hand():
-        print("Press {} to equip Short sword".format('s'))
-        print("Press {} to equip Long sword".format('l'))
-        print("Press {} to equip Bastard sword".format('b'))
-        weap = input(">>>>")
-        from actions import battle
-        if weap == 's':
-            while short_sword in hero.INVENTORY:
-                hero.ATK += short_sword.ATK
-                hero.INVENTORY.remove(short_sword)
-                print("Your ATK increased by " + str(short_sword.ATK))
-                battle()
-            else:
-                print("You do not have it in Your inventory")
-                battle()
-        elif weap == "l":
-            while long_sword in hero.INVENTORY:
-                hero.ATK += long_sword.ATK
-                hero.INVENTORY.remove(long_sword)
-                print("Your ATK increased by " + str(long_sword.ATK))
-                battle()
-            else:
-                print("You do not have it in Your inventory")
-                battle()
-        elif weap == "b":
-            while bastard_Sword in hero.INVENTORY:
-                hero.ATK += bastard_Sword.ATK
-                hero.INVENTORY.remove(bastard_Sword)
-                print("Your ATK increased by " + str(bastard_Sword.ATK))
-                battle()
-            else:
-                print("You do not have it in Your inventory")
-                battle()
-
-    @staticmethod
     def equip():
+
         n = 0
         while True:
             for k in slot.keys():
@@ -117,7 +74,8 @@ class Player:
                 print("Press {} to equip {}".format(n, '%s' % k))
             option = input("Choose slot You wish to equip >>>>> ")
             if option == "10":
-                Player.equip_hand()
+                from equip_item import equip_hand
+                equip_hand()
             else:
                 print("Choose the correct slot")
                 continue
@@ -128,7 +86,7 @@ class Player:
 
         roll = twenty_sided_die.roll()
         if roll >= hero.thaco - mob.ac:
-            rollD = random.choice(hero.ATK)
+            rollD = hero.ATK
             print(hero.name + " rolled " + str(roll) + " and hit " + mob.name + " for " + str(rollD) + " damage.", "",
                   sep="\n")
             mob.hp -= rollD
@@ -271,6 +229,13 @@ class Player:
                     hero.hp = hero.MAX_HP
                 time.sleep(1)
                 break
+
+    @staticmethod
+    def check_stats():
+        """ This method prints current Player character stats"""
+
+        print("Name: {}, HP: {}, MANA: {}, AC: {}, EXP: {}, ATK: {}\n".format(
+            hero.name, hero.hp, hero.mana, hero.ac, hero.EXP, hero.thaco))
 
 
 class Fighter(Player):
