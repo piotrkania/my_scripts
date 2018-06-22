@@ -26,7 +26,7 @@ def battle():
                 continue
             elif command == "f":
                 hero.fight()
-                continue
+                break
             elif command == "e":
                 hero.check_equipment()
                 continue
@@ -35,5 +35,6 @@ def battle():
                 continue
             elif command == "s":
                 hero.cast_spell()
+                break
         break
 

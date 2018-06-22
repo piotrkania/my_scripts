@@ -86,7 +86,7 @@ class Player:
 
         roll = twenty_sided_die.roll()
         if roll >= hero.thaco - mob.ac:
-            rollD = hero.ATK
+            rollD = random.choice(hero.ATK)
             print(hero.name + " rolled " + str(roll) + " and hit " + mob.name + " for " + str(rollD) + " damage.", "",
                   sep="\n")
             mob.hp -= rollD
@@ -269,7 +269,7 @@ class Fighter(Player):
     LVL_EXP = 40
     MANA = 0
     MAX_MANA = 0
-    ATK = 20
+    ATK = [20]
     COMMANDS = {
         'f': ('fight', fight),
         'h': ('heal', heal),
